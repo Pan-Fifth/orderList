@@ -49,6 +49,8 @@
   border: 1px solid #ddd;
   border-radius: 5px;
   color: #333;
+  text-align: right;
+  
 }
 
 .custom-table td {

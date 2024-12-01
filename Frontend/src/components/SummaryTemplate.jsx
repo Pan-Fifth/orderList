@@ -1,16 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import useTableStore from "../store/tableStore";
 import "../App.css";
 
-const SummaryTemplate = () => {
-    const [values, setValues] = useState({
-        netPrice: 0,
-        discount: 0,
-        priceAfterDiscount: 0,
-        vat: 0,
-        grandTotal: 0,
-        note: "",
-    });
+const SummaryTemplate = ({ data,sumNote,setSumNote }) => {
+    const [totalPrice, setTotalPrice] = useState(0)
+    const [discount, setDiscount] = useState(0)
+    const [afterDis, setAfterDis] = useState(0)
+    const [vat, setVat] = useState(0)
+    const [grandTotal,setGrandTotal] = useState(0)
+    const upDatePrice = useTableStore(state=>state.upDatePrice)
+    useEffect(() => {
+        summary()
+        upDatePrice(totalPrice,discount,afterDis,vat,grandTotal)
+    }, [data])
 
+    const summary = () => {
+
+        const sum = data.reduce((acc, el) => {
+            return acc + Number(el.priceBeforeDis || 0)
+        }, 0)
+        const discountAmount = data.reduce((acc, el) => {
+            return acc + Number((el.Dis*el.priceBeforeDis)/100 || 0)
+        }, 0)
+        const afterDiscountAmount = data.reduce((acc, el) => {
+            return acc + Number(el.net || 0)
+        }, 0)
+        
+        
+        setTotalPrice(sum)
+        setDiscount(discountAmount)
+        setAfterDis(afterDiscountAmount)
+        setVat((afterDiscountAmount * 7) / 100)
+        setGrandTotal(afterDiscountAmount+((afterDiscountAmount * 7) / 100))
+    }
+    const hdlNote = (e) => {
+        setSumNote(e.target.value)
+      }
+  
     return (
         <div>
             <h1 style={{ width: "100%" }}>สรุป</h1>
@@ -18,7 +44,7 @@ const SummaryTemplate = () => {
                 <div className="summary-item">
                     <label>ราคาสุทธิ</label>
                     <div className="showSum">
-                        <p>{values.netPrice}</p>
+                        <p>{totalPrice}</p>
                         <span>THB</span>
                     </div>
                 </div>
@@ -26,7 +52,7 @@ const SummaryTemplate = () => {
                 <div className="summary-item">
                     <label>ส่วนลดท้ายบิล</label>
                     <div className="showSum">
-                        <p>{values.discount}</p>
+                        <p>{discount}</p>
                         <span>THB</span>
                     </div>
                 </div>
@@ -34,7 +60,7 @@ const SummaryTemplate = () => {
                 <div className="summary-item">
                     <label>ราคาหลังหักส่วนลด</label>
                     <div className="showSum">
-                        <p>{values.priceAfterDiscount}</p>
+                        <p>{afterDis}</p>
                         <span>THB</span>
                     </div>
                 </div>
@@ -42,20 +68,26 @@ const SummaryTemplate = () => {
                 <div className="summary-item">
                     <label>Vat</label>
                     <div className="showSum">
-                        <p>{values.vat}</p>
+                        <p>{vat}</p>
                         <span>THB</span>
                     </div>
                 </div>
 
-                <div className="grand-total">
-                    <span>Grand Total</span>
-                    <span>{values.grandTotal.toFixed(2)} THB</span>
+                <div className="grand-total" >
+                    <span style={{ paddingLeft: "15px" }}>Grand Total</span>
+                    <span style={{paddingRight:"15px"}}>{grandTotal.toFixed(2)} THB</span>
                 </div>
+
 
                 <div className="note-section">
-
-                    <p>{values.note}</p>
+                    <textarea
+                        onChange={hdlNote}
+                        placeholder="Note"
+                        value={sumNote}
+                        style={{ paddingLeft: '15px', paddingTop: "15px" }}
+                    />
                 </div>
+
             </div>
         </div>
     );
