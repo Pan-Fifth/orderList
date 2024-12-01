@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useTableStore from "../store/tableStore";
 import "../App.css";
 
 const SummaryTemplate = ({ data,sumNote,setSumNote }) => {
@@ -8,10 +7,8 @@ const SummaryTemplate = ({ data,sumNote,setSumNote }) => {
     const [afterDis, setAfterDis] = useState(0)
     const [vat, setVat] = useState(0)
     const [grandTotal,setGrandTotal] = useState(0)
-    const upDatePrice = useTableStore(state=>state.upDatePrice)
     useEffect(() => {
         summary()
-        upDatePrice(totalPrice,discount,afterDis,vat,grandTotal)
     }, [data])
 
     const summary = () => {
