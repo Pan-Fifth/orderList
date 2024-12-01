@@ -43,7 +43,7 @@
   border-right: 1px solid #ddd;
 }
 
-.custom-table td input {
+.custom-table td input,select  {
   height: 40px;
   width: 120px;
   border: 1px solid #ddd;

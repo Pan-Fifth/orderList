@@ -38,7 +38,17 @@ const Row = ({ data, index, setData }) => {
                 <td className="line"><input type="number" name="quantity" value={data?.quantity || ''} onChange={hdlOnChange} /></td>
                 <td className="line"><input type="number" name="weight" value={data?.weight || ''} onChange={hdlOnChange} /></td>
                 <td><input type="number" name="price" value={data?.price || ''} onChange={hdlOnChange} /></td>
-                <td><input type="text" name="unit" value={data?.unit || ''} onChange={hdlOnChange} /></td>
+                <td>
+                    <select 
+                        name="unit" 
+                        value={data?.unit || ''} 
+                        onChange={hdlOnChange}
+                    >
+                        <option value="">Select unit</option>
+                        <option value="piece">ชิ้น</option>
+                        <option value="gram">กรัม</option>
+                    </select>
+                </td>
                 <td className="line"><input type="number" name="priceBeforeDis" value={data?.priceBeforeDis || 0} readOnly  /></td>
                 <td className="line"> <div style={{ display: 'flex', alignItems: 'center', gap:"2px" }}>
                     <input type="number" name="Dis" value={data?.Dis || ''} onChange={hdlOnChange} />
